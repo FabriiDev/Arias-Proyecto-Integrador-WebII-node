@@ -5,11 +5,15 @@ import fetch from 'node-fetch';
 import translate from 'node-google-translate-skidz';
 
 const app = express();
-const port = 3000;
+//const port = 3000;
+
+const port = process.env.PORT || 3000;
 
 // Middleware para servir archivos estáticos
-app.use(express.static('public'));
 
+// app.use(express.static('public'));
+
+app.use(express.static(__dirname + '/public/'));
 /* middleware que parsea el body de la url. necesario para leer los datos enviados por el form*/
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Para manejar JSON
