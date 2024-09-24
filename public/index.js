@@ -134,8 +134,6 @@ function leerPalabra() {
 // -------------------------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------- Boton buscar ----------------------------------------------------------------
 async function buscar() {
-    console.time('lo que tarda')
-    console.log(timestar)
     tarjetas = '';
     const url = tipoDeFiltro();
     console.log("URL de búsqueda:", url);

@@ -107,20 +107,23 @@ app.get("/traducir", (req, res) => {
 
 app.post("/busqueda-general", async (req, res) => {
     try {
-       
         let url = req.body.url;
         let ids = await traerIds(url);
         
-        //trae unicamente 500
+        // Limitar a un máximo de 200 IDs
         ids = ids.slice(0, Math.min(ids.length, 200));
-        //fetch a cada id
+        
+        // Fetch a cada ID
         let objetos = await objetosPromise(ids);
+        
+        // Realizar traducción
         await traduccion(objetos);
         
         res.json(objetos);
         
     } catch (error) {
-        console.log('error: ', error)
+        console.error('Error en /busqueda-general: ', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
@@ -128,102 +131,63 @@ app.post("/busqueda-general", async (req, res) => {
 // ----------------------------------
 
 async function traerIds(url) {
-    let idObj
-    let respuesta
     try {
-        idObj = ["lil shit"];
-        respuesta = await fetch(url);
-        //checkeamos que no se halla reventado la api o nos tire un 404
+        const respuesta = await fetch(url);
         if (respuesta.ok) {
-            let datos = await respuesta.json();
-            idObj = datos.objectIDs;
+            const datos = await respuesta.json();
+            return datos.objectIDs || [];
         }
-        
-        return idObj;
+        return [];
     } catch (error) {
-        console.log('eror traerid- ', error, idObj)
+        console.log('Error en traerIds: ', error);
+        return [];
     }
 }
 
 // ----------------------------------------------- 
 
 async function objetosPromise(ids) {
-    if (ids.length > 0) {
-        let promesas = ids.map(async (ids) => {
-            try {
-                let respuesta = await fetch(
-                    `https://collectionapi.metmuseum.org/public/collection/v1/objects/${ids}`
-                );
-                if (!respuesta.ok) {
-                    return null;
-                }
-
-                let object = await respuesta.json();
-                return object;
-            } catch (error) {
-                return null;
-            }
-        });
-        let resultados = await Promise.all(promesas);
-
-        let objetos = resultados.filter((resultado) => resultado !== null);
-        return objetos;
-    } else {
-        console.log("no se encontro ningun elemento");
+    if (ids.length === 0) {
+        console.log("No se encontró ningún elemento");
+        return [];
     }
+
+    const promesas = ids.map(async (id) => {
+        try {
+            const respuesta = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`);
+            if (!respuesta.ok) return null;
+            return await respuesta.json();
+        } catch (error) {
+            console.log('Error en objetosPromise: ', error);
+            return null;
+        }
+    });
+
+    const resultados = await Promise.all(promesas);
+    return resultados.filter(resultado => resultado !== null);
 }
 
 // --> traduccion
 
 async function traduccion(objetos) {
-    for (const element of objetos) {
-        const promises = [];
+    const promises = objetos.map(async (element) => {
+        const translations = {};
+        
+        if (element.title) translations.title = element.title;
+        if (element.dynasty) translations.dynasty = element.dynasty;
+        if (element.culture) translations.culture = element.culture;
 
-        if (element.title) {
-            let texto = element.title;
-            promises.push(
-                translate({
-                    text: texto,
-                    source: "en",
-                    target: "es",
-                }).then((result) => {
+        // Solo realizar traducciones si hay texto para traducir
+        const translationPromises = Object.entries(translations).map(([key, texto]) =>
+            translate({ text: texto, source: "en", target: "es" }).then(result => {
+                element[key] = result.translation;
+            })
+        );
 
-                    element.title = result.translation;
-                    
-                })
-            );
-        }
+        await Promise.all(translationPromises);
+    });
 
-        if (element.dynasty) {
-            let texto = element.dynasty;
-            promises.push(
-                translate({
-                    text: texto,
-                    source: "en",
-                    target: "es",
-                }).then((result) => {
-                    element.dynasty = result.translation;
-                })
-            );
-        }
-
-        if (element.culture) {
-            let texto = element.culture;
-            promises.push(
-                translate({
-                    text: texto,
-                    source: "en",
-                    target: "es",
-                }).then((result) => {
-                    element.culture = result.translation;
-                })
-            );
-        }
-
-        // todas las promesas de forma asincronica
-        await Promise.all(promises);
-
-    }
+    await Promise.all(promises);
 }
 
 // Iniciar el servidor
