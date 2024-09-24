@@ -2,15 +2,9 @@
 const urlParams = new URLSearchParams(window.location.search);
 const objetoId = urlParams.get('objeto');
 const titulo = urlParams.get('titulo');
-const cultura = urlParams.get('cultura');
-const dinastia = urlParams.get('dinastia');
-const creacion = urlParams.get('creacion');
-
-console.log('ID del objeto:', objetoId);
-console.log('Título:', titulo);
-console.log('Cultura:', cultura);
-console.log('Dinastía:', dinastia);
-console.log('Creación:', creacion);
+const cultura = urlParams.get('cultura') || 'No tiene cultura';
+const dinastia = urlParams.get('dinastia') || 'No tiene dinastia';
+const creacion = urlParams.get('creacion') || 'No se sabe';
 
 const cargarImgAd = async () => {
     try {

@@ -69,14 +69,14 @@ function crearTarjeta(obraDeArte) {
 
     // Añadir la tarjeta al contenedor
     //document.getElementById('cont_tarjeta').innerHTML += tarjetaHTML;
-    
+
     return true; // Indica que la tarjeta fue creada exitosamente
 }
 // ------------------------------------------ crear botones paginacion ---------------------------------------------------------
-function botonesDeBajoTar(){
-    let btns =  `<a href="#arriba"> <button onclick="anterior()">Anterior </button> </a> 
+function botonesDeBajoTar() {
+    let btns = `<a href="#arriba"> <button onclick="anterior()">Anterior </button> </a> 
                 <div class="cont_paginas">
-                    <p></p>
+                    <p>${nroDepag}</p>
                 </div>
                 <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>`
     document.getElementById('btn_debajo').innerHTML = btns;
@@ -137,48 +137,73 @@ function leerPalabra() {
 }
 // -------------------------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------- Boton buscar ----------------------------------------------------------------
+let nroDepag;
 async function buscar() {
     tarjetas = '';
     const url = tipoDeFiltro();
+
+    if (url === '0') {
+        return;
+    }
+
     console.log("URL de búsqueda:", url);
     showLoader(); // mostrar cargando
-    // await filtroGeneral(url);
-    // ------------------------------------------- 
 
-    fetch("/busqueda-general", {
-        method: "POST", // método HTTP
-        headers: {
-            "Content-Type": "application/json", // tipo de contenido
-        },
-        body: JSON.stringify({ url }), // Enviar solo la URL como objeto JSON
-        //esprea el json desde el server
-    })
-        .then((respuesta) => respuesta.json())
-        .then((datos) => {
-            document.getElementById("cont_tarjeta").innerHTML = "";
-            // le paso a la paginacion los objetos que solo tengan las primary image small, asi no quedan huecos randoms en las tarjetas
-            const objetosConImagen = datos.filter(objeto => objeto.primaryImageSmall);
-            objGlobal = paginas(objetosConImagen);
-            indexPagina = 0;
-            document.getElementById("ver_paginas").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
-            //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    try {
+        const respuesta = await fetch("/busqueda-general", {
+            method: "POST", // método HTTP
+            headers: {
+                "Content-Type": "application/json", // tipo de contenido
+            },
+            body: JSON.stringify({ url }), // Enviar solo la URL como objeto JSON
+        });
+
+        // este if es por que vercel solo espera 10 segundos y a veces la llamada demora mas
+        if (respuesta.status === 504) {
+            alert("Tiempo de carga exedido... Vercel no me permite que la busqueda supere los 10 seg y a veces la api tarda demasiado");
+            window.location.href = window.location.href; // Recarga la página al aceptar el alert
+            return;
+        }
+
+        // Si la respuesta es exitosa
+        const datos = await respuesta.json();
+        document.getElementById("cont_tarjeta").innerHTML = "";
+        document.getElementById('errorP').innerHTML = '';
+        // Filtrar objetos con imágenes
+        const objetosConImagen = datos.filter(objeto => objeto.primaryImageSmall);
+        objGlobal = paginas(objetosConImagen);
+        indexPagina = 0;
+        nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+        document.getElementById("ver_paginas").innerHTML = nroDepag;
+        //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+        if (Array.isArray(objGlobal[0])) {
             for (const element of objGlobal[0]) {
                 crearTarjeta(element);
             }
-            hideLoader();
             botonesDeBajoTar();
+        }else{
+            let malaBusqueda = `<P class"noEncontrado">No hay coincidencias en lo que buscas!</P>`;
+            document.getElementById('errorP').innerHTML = malaBusqueda;
+            document.getElementById('btn_debajo').innerHTML = '';
+        }
 
-        });
+        hideLoader();
         
+
+    } catch (error) {
+        console.error("Error durante la búsqueda:", error);
+        hideLoader();
+    }
 }
+
 
 // ------------------------------------------------------- paginacion creo que terminada -----------------------------------------------------
 
 function paginas(obj) {
     let tam = 20;
     const arrayVeinte = [];
-    
-   
+
+
     for (let i = 0; i < obj.length; i += tam) {
         arrayVeinte.push(obj.slice(i, i + tam));
     }
@@ -191,7 +216,9 @@ function siguiente() {
         indexPagina = objGlobal.length - 1;
     }
     document.getElementById("cont_tarjeta").innerHTML = "";
-    document.getElementById("ver_paginas").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    document.getElementById("ver_paginas").innerHTML = nroDepag;
+    botonesDeBajoTar();
     //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     for (const element of objGlobal[indexPagina]) {
         crearTarjeta(element);
@@ -204,7 +231,9 @@ function anterior() {
         indexPagina = 0;
     }
     document.getElementById("cont_tarjeta").innerHTML = "";
-    document.getElementById("ver_paginas").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    document.getElementById("ver_paginas").innerHTML = nroDepag;
+    botonesDeBajoTar();
     //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     for (const element of objGlobal[indexPagina]) {
         crearTarjeta(element);
@@ -242,10 +271,31 @@ function tipoDeFiltro() {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}`;
         return url;
     } else {
-        url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=*`;
+        marcarError();
+        alert('Elija al menos un filtro');        
+        url = '0'
         return url;
     }
 }
+
+// con esta funcion marco en rojo los bordes de los select y el input, para que el user haga focus ahi
+
+function marcarError() {
+    const elementos = [document.querySelector('select#combo'), document.querySelector('select#combo-loc'), document.querySelector('input#palabra')];
+
+    // Agregar la clase "error" a los elementos
+    elementos.forEach(elemento => {
+        elemento.classList.add('pintarRojo');
+    });
+
+    // Remover la clase "error" después de 3 segundos
+    setTimeout(() => {
+        elementos.forEach(elemento => {
+            elemento.classList.remove('pintarRojo');
+        });
+    }, 2000); // 3000 milisegundos = 3 segundos
+}
+
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------- PRIMERA PRUEBA DE FILTROS ---------------------------------------------------
