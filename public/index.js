@@ -74,7 +74,11 @@ function crearTarjeta(obraDeArte) {
 }
 // ------------------------------------------ crear botones paginacion ---------------------------------------------------------
 function botonesDeBajoTar(){
-    let btns =  '<a href="#arriba"> <button onclick="anterior()"> Anterior </button> </a> <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>'
+    let btns =  `<a href="#arriba"> <button onclick="anterior()">Anterior </button> </a> 
+                <div class="cont_paginas">
+                    <p></p>
+                </div>
+                <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>`
     document.getElementById('btn_debajo').innerHTML = btns;
 
 }
@@ -156,7 +160,8 @@ async function buscar() {
             const objetosConImagen = datos.filter(objeto => objeto.primaryImageSmall);
             objGlobal = paginas(objetosConImagen);
             indexPagina = 0;
-            document.getElementById("ver_paginas").innerHTML = `pagina:${indexPagina + 1} de ${objGlobal.length}`;
+            document.getElementById("ver_paginas").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+            //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
             for (const element of objGlobal[0]) {
                 crearTarjeta(element);
             }
@@ -186,7 +191,8 @@ function siguiente() {
         indexPagina = objGlobal.length - 1;
     }
     document.getElementById("cont_tarjeta").innerHTML = "";
-    document.getElementById("ver_paginas").innerHTML = `pagina:${indexPagina + 1} de ${objGlobal.length}`;
+    document.getElementById("ver_paginas").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     for (const element of objGlobal[indexPagina]) {
         crearTarjeta(element);
     }
@@ -198,7 +204,8 @@ function anterior() {
         indexPagina = 0;
     }
     document.getElementById("cont_tarjeta").innerHTML = "";
-    document.getElementById("ver_paginas").innerHTML = `pagina:${indexPagina + 1} de ${objGlobal.length}`;
+    document.getElementById("ver_paginas").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+    //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     for (const element of objGlobal[indexPagina]) {
         crearTarjeta(element);
     }

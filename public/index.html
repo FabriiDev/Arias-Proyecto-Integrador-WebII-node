@@ -10,7 +10,7 @@
 
 <body>
 
-    <h1>The Metropolitan Museum of Art</h1>
+    <h1>El Museo Metropolitano Del Arte</h1>
 
     <!-- ----------------------dropdown de departamentos------------------ -->
 
@@ -21,7 +21,7 @@
             <select id="combo" class="drop-departamentos">
 
             </select>
-           
+
         </div>
         <h3 class="label-seleccionar">Locacion: </h3>
 
@@ -45,17 +45,17 @@
                 <option value="Denmark">Dinamarca</option>
                 <option value="Czech Republic">Republica Checa</option>
             </select>
-            
+
         </div>
 
         <h3 class="label-seleccionar">Palabra clave: </h3>
 
         <div class="cont-busquedas">
             <input type="text" class="inbox" id="palabra">
-            
+
         </div>
 
-        <div class="contenedor-btn">
+        <div class="contenedor-btn" id="arriba">
             <button class="btn-buscar" id="btn-bscar" onclick="buscar()">Buscar</button>
         </div>
 
@@ -78,16 +78,17 @@
 
     <!-- ------------------------------ paginas -------------------------- -->
 
-    <div class="cont_paginas" id="arriba">
-        <p id="ver_paginas"></p>
-    </div>
-    <div class="cont_botones" > 
+
+    <div class="cont-botones">
         <a href="#arriba"> <button onclick="anterior()"> Anterior </button> </a>
+        <div class="cont_paginas" id="arriba">
+            <p id="ver_paginas"></p>
+        </div>
         <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>
     </div>
 
     <!-- ---------------------seccion de tarjetas------------------------- -->
-    
+
     <div id="pagination"></div>
 
     <div class="seccion-tarjetas">
@@ -100,12 +101,19 @@
 
     </div>
 
-    <div id="btn_debajo" class="cont_botones"></div>
+    <!-- -------------------------------------- botones de abajo -------------------------------------- -->
 
-    <!-- ------------------------------------------------------------------ -->
-     <div class="footer">
+    <div id="btn_debajo" class="cont-botones">
+
+        <div class="cont_paginas">
+            <p id="ver_paginas_abajo"></p>
+        </div>
         
-     </div>
+    </div>
+    <!-- ------------------------------------------------------------------ -->
+    <div class="footer">
+
+    </div>
 
     <script src="index.js"></script>
 
