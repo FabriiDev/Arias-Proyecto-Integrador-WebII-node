@@ -24,6 +24,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Para manejar JSON
 // -------------------------------------------------
 
+// Ruta para servir el archivo HTML principal
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+
 // Ruta para obtener todos los objetos
 app.get('/api/objects', async (req, res) => {
     try {
