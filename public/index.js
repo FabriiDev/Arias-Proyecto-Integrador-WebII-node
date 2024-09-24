@@ -141,7 +141,7 @@ async function buscar() {
     // await filtroGeneral(url);
     // ------------------------------------------- 
 
-    fetch("/", {
+    fetch("/busqueda-general", {
         method: "POST", // método HTTP
         headers: {
             "Content-Type": "application/json", // tipo de contenido

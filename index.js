@@ -105,7 +105,7 @@ app.get("/traducir", (req, res) => {
 
 // --> post
 
-app.post("/", async (req, res) => {
+app.post("/busqueda-general", async (req, res) => {
     try {
        
         let url = req.body.url;
