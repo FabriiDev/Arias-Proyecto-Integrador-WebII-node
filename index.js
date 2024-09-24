@@ -189,7 +189,7 @@ async function traduccion(objetos) {
                 }).then((result) => {
 
                     element.title = result.translation;
-                    console.log(element.title)
+                    
                 })
             );
         }

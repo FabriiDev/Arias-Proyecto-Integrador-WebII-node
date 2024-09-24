@@ -134,6 +134,8 @@ function leerPalabra() {
 // -------------------------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------- Boton buscar ----------------------------------------------------------------
 async function buscar() {
+    console.time('lo que tarda')
+    console.log(timestar)
     tarjetas = '';
     const url = tipoDeFiltro();
     console.log("URL de búsqueda:", url);
@@ -164,7 +166,7 @@ async function buscar() {
             botonesDeBajoTar();
 
         });
-
+        
 }
 
 // ------------------------------------------------------- paginacion creo que terminada -----------------------------------------------------
@@ -217,7 +219,6 @@ function tipoDeFiltro() {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${lcl}&q=${palabra}&DepartmentId=${dpt}`;
         return url;
     } else if (dpt !== 'nada' && lcl !== '') {
-        console.log('asddddddddddddddddddddd')
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${lcl}&q=*&DepartmentId=${dpt}`;
         return url;
     } else if (dpt !== 'nada' && palabra !== '') {
