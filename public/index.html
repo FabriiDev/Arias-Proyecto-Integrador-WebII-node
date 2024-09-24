@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museo</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+    <h1>The Metropolitan Museum of Art</h1>
+
+    <!-- ----------------------dropdown de departamentos------------------ -->
+
+    <div class="contenedor-elecciones">
+
+        <h3 class="label-seleccionar">Seleccione un depto:</h3>
+        <div class="cont-busquedas">
+            <select id="combo" class="drop-departamentos">
+
+            </select>
+           
+        </div>
+        <h3 class="label-seleccionar">Locacion: </h3>
+
+        <div class="cont-busquedas">
+
+            <select name="" id="combo-loc" class="drop-departamentos">
+                <option value="">Seleccione una</option>
+                <option value="China">China</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Guatemala">Guatemala</option>
+                <option value="England">Inglaterra</option>
+                <option value="Belgium">Belgica</option>
+                <option value="Spain">España</option>
+                <option value="Canada">Canada</option>
+                <option value="">Francia</option>
+                <option value="Italy">Italia</option>
+                <option value="Germany">Alemania</option>
+                <option value="Japan">Japon</option>
+                <option value="Venezuela">Venezuela</option>
+                <option value="Netherlands">Paises bajos</option>
+                <option value="Denmark">Dinamarca</option>
+                <option value="Czech Republic">Republica Checa</option>
+            </select>
+            
+        </div>
+
+        <h3 class="label-seleccionar">Palabra clave: </h3>
+
+        <div class="cont-busquedas">
+            <input type="text" class="inbox" id="palabra">
+            
+        </div>
+
+        <div class="contenedor-btn">
+            <button class="btn-buscar" id="btn-bscar" onclick="buscar()">Buscar</button>
+        </div>
+
+
+
+        <div class="no-encontrado" id="no-encontrado">
+
+        </div>
+
+    </div>
+
+
+    <!-- ----------------------------Cargando----------------------------- -->
+
+    <div class="cont-carga">
+        <div class="carga" id="carga"></div>
+    </div>
+
+    <div id="botones-paginacion" class="botones-paginacion"></div>
+
+    <!-- ------------------------------ paginas -------------------------- -->
+
+    <div class="cont_paginas" id="arriba">
+        <p id="ver_paginas"></p>
+    </div>
+    <div class="cont_botones" > 
+        <a href="#arriba"> <button onclick="anterior()"> Anterior </button> </a>
+        <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>
+    </div>
+
+    <!-- ---------------------seccion de tarjetas------------------------- -->
+    
+    <div id="pagination"></div>
+
+    <div class="seccion-tarjetas">
+
+
+        <div id="cont_tarjeta" class="cont-tarjeta">
+
+        </div>
+
+
+    </div>
+
+    <div id="btn_debajo" class="cont_botones"></div>
+
+    <!-- ------------------------------------------------------------------ -->
+     <div class="footer">
+        
+     </div>
+
+    <script src="index.js"></script>
+
+
+</body>
+
+</html>
