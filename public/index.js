@@ -271,8 +271,8 @@ function tipoDeFiltro() {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}`;
         return url;
     } else {
-        marcarError();
-        alert('Elija al menos un filtro');        
+        alert('Elija al menos un filtro');
+        marcarError();        
         url = '0'
         return url;
     }
