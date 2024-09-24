@@ -111,7 +111,7 @@ app.post("/busqueda-general", async (req, res) => {
         let ids = await traerIds(url);
         
         // Limitar a un máximo de 200 IDs
-        ids = ids.slice(0, Math.min(ids.length, 200));
+        ids = ids.slice(0, Math.min(ids.length, 150));
         
         // Fetch a cada ID
         let objetos = await objetosPromise(ids);
