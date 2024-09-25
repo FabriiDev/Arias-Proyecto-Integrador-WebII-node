@@ -5,6 +5,18 @@ let objetitos = [];
 var objGlobal = [];
 let indexPagina;
 
+// ------------------------------------------------- FOOTER INICIAL -----------------------------------------------------
+let foot;
+function footerInicial(){
+    foot = document.getElementById('ftInicial');
+    foot.style.position = "fixed";
+    foot.style.bottom = "0";
+    foot.style.left = "0";
+    foot.style.right = "0";
+}
+footerInicial();
+
+
 // -------------------------------------------ANIMACION DE CARGA ----------------------------------------------------------
 const loader = document.getElementById("carga");
 const showLoader = () => {
@@ -81,6 +93,14 @@ function botonesDeBajoTar() {
                 <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>`
     document.getElementById('btn_debajo').innerHTML = btns;
 
+}
+
+// ACTIVAR VISIVILAD DE LOS BOTONES DE ARRIBA
+let btnArribaVisible
+function actibarBtnsArriba() {
+    btnArribaVisible = document.getElementById("ocultos");
+    btnArribaVisible.style.display = "flex";
+    
 }
 
 // ---------------------------------------------------- llenar combo departamentos ---------------------------------------------
@@ -160,35 +180,47 @@ async function buscar() {
 
         // este if es por que vercel solo espera 10 segundos y a veces la llamada demora mas
         if (respuesta.status === 504) {
-            alert("Tiempo de carga exedido... Vercel no me permite que la busqueda supere los 10 seg y a veces la api tarda demasiado");
+            //alert("Tiempo de carga exedido... Vercel no me permite que la busqueda supere los 10 seg y a veces la api tarda demasiado");
+            showAlert('Tiempo de carga exedido... Vercel no me permite que la busqueda supere los 10 seg y a veces la api tarda demasiado');
             window.location.href = window.location.href; // Recarga la página al aceptar el alert
             return;
         }
 
         // Si la respuesta es exitosa
         const datos = await respuesta.json();
+
+        // limpieza de html
         document.getElementById("cont_tarjeta").innerHTML = "";
         document.getElementById('errorP').innerHTML = '';
+
         // Filtrar objetos con imágenes
         const objetosConImagen = datos.filter(objeto => objeto.primaryImageSmall);
+
+        // textos a mostrar en dom
         objGlobal = paginas(objetosConImagen);
         indexPagina = 0;
         nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
         document.getElementById("ver_paginas").innerHTML = nroDepag;
+        document.getElementById('ftInicial').style.position = "relative";
         //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
+
+        
         if (Array.isArray(objGlobal[0])) {
             for (const element of objGlobal[0]) {
                 crearTarjeta(element);
             }
             botonesDeBajoTar();
-        }else{
+            actibarBtnsArriba();
+        } else {
             let malaBusqueda = `<P class"noEncontrado">No hay coincidencias en lo que buscas!</P>`;
             document.getElementById('errorP').innerHTML = malaBusqueda;
             document.getElementById('btn_debajo').innerHTML = '';
+            document.getElementById('ocultos').style.display = "none";
+            footerInicial();
         }
 
         hideLoader();
-        
+
 
     } catch (error) {
         console.error("Error durante la búsqueda:", error);
@@ -219,6 +251,7 @@ function siguiente() {
     nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     document.getElementById("ver_paginas").innerHTML = nroDepag;
     botonesDeBajoTar();
+    actibarBtnsArriba();
     //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     for (const element of objGlobal[indexPagina]) {
         crearTarjeta(element);
@@ -234,6 +267,7 @@ function anterior() {
     nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     document.getElementById("ver_paginas").innerHTML = nroDepag;
     botonesDeBajoTar();
+    actibarBtnsArriba();
     //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     for (const element of objGlobal[indexPagina]) {
         crearTarjeta(element);
@@ -271,8 +305,9 @@ function tipoDeFiltro() {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}`;
         return url;
     } else {
-        alert('Elija al menos un filtro');
-        marcarError();        
+        //alert('Elija al menos un filtro');
+        showAlert('Elija al menos un filtro');
+        marcarError();
         url = '0'
         return url;
     }
@@ -295,6 +330,18 @@ function marcarError() {
         });
     }, 2000); // 3000 milisegundos = 3 segundos
 }
+
+// ---------------------------------------------------------- alertas ------------------------------------------------------
+
+function showAlert(message) {
+    document.getElementById("alertMessage").textContent = message;
+    document.getElementById("customAlert").style.display = "block";
+}
+
+function closeAlert() {
+    document.getElementById("customAlert").style.display = "none";
+}
+
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------

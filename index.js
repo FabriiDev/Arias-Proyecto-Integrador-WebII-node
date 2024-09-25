@@ -29,19 +29,6 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-
-// Ruta para obtener todos los objetos
-app.get('/api/objects', async (req, res) => {
-    try {
-        const response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects');
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener los objetos' });
-    }
-});
-
-
 app.get('/api/departments', async (req, res) => {
     try {
         // Simula una respuesta de la API para departamentos
@@ -53,20 +40,6 @@ app.get('/api/departments', async (req, res) => {
         res.status(500).send('Error al obtener departamentos');
     }
 });
-
-
-app.get('/api/objects/:id', async (req, res) => {
-    const objectID = req.params.id;
-    try {
-        const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error(`Error al obtener objeto ${objectID}:`, error);
-        res.status(500).send(`Error al obtener objeto ${objectID}`);
-    }
-});
-
 
 app.get('/api/objects/:id/images', async (req, res) => {
     const objectID = req.params.id;
@@ -194,3 +167,32 @@ async function traduccion(objetos) {
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
+
+// ---------------------------------- primeros intentos de gets ---------------------------------
+/*
+app.get('/api/objects/:id', async (req, res) => {
+    const objectID = req.params.id;
+    try {
+        const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`);
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error(`Error al obtener objeto ${objectID}:`, error);
+        res.status(500).send(`Error al obtener objeto ${objectID}`);
+    }
+}); 
+
+// Ruta para obtener todos los objetos
+app.get('/api/objects', async (req, res) => {
+    try {
+        const response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects');
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los objetos' });
+    }
+});
+
+
+*/
