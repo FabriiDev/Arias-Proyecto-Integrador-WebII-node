@@ -204,7 +204,7 @@ async function buscar() {
         document.getElementById('ftInicial').style.position = "relative";
         //document.getElementById("ver_paginas_abajo").innerHTML = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
 
-        
+
         if (Array.isArray(objGlobal[0])) {
             for (const element of objGlobal[0]) {
                 crearTarjeta(element);
@@ -276,8 +276,9 @@ function anterior() {
 }
 
 //-------------------------------------------------------TIPO DE FILTRADO------------------------------------------------------------------------
+let dpt
 function tipoDeFiltro() {
-    let dpt = seleccion
+    dpt = seleccion
     let palabra = document.getElementById('palabra').value
     let lcl = loca
     let url;
@@ -307,6 +308,7 @@ function tipoDeFiltro() {
     } else {
         //alert('Elija al menos un filtro');
         showAlert('Elija al menos un filtro');
+        
         marcarError();
         url = '0'
         return url;
@@ -342,7 +344,16 @@ function closeAlert() {
     document.getElementById("customAlert").style.display = "none";
 }
 
+// -----------------------------------------------------------------------------------------------------
 
+function limpiarCampos(){
+    document.getElementById('palabra').value = '';
+    document.getElementById('combo-loc').selectedIndex = 0;
+    document.getElementById('combo').selectedIndex = 0;
+    seleccion = 'nada';
+    loca = '';
+    palabra = ''
+}
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------- PRIMERA PRUEBA DE FILTROS ---------------------------------------------------

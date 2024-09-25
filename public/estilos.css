@@ -138,6 +138,18 @@ h1 {
     gap: 15px;
 }
 
+.limpiar-campos{
+    background: none;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.limpiar-campos:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 /* -----------------------------------------------TARJETA-------------------------------------------------------- */
 
 .no-encontrado {
