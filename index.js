@@ -1,7 +1,7 @@
 import express, { text } from 'express';
 import fetch from 'node-fetch';
 
-// lib traduccion 
+// libreria de traduccion 
 import translate from 'node-google-translate-skidz';
 
 import { fileURLToPath } from 'url';
@@ -10,7 +10,6 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
-//const port = 3000;
 
 const port = process.env.PORT || 3000;
 
@@ -19,9 +18,8 @@ const port = process.env.PORT || 3000;
 // app.use(express.static('public'));
 
 app.use(express.static(__dirname + '/public/'));
-/* middleware que parsea el body de la url. necesario para leer los datos enviados por el form*/
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // Para manejar JSON
+app.use(express.json());
 // -------------------------------------------------
 
 // Ruta para servir el archivo HTML principal
@@ -87,7 +85,7 @@ app.post("/busqueda-general", async (req, res) => {
         ids = ids.slice(0, Math.min(ids.length, 150));
         
         // Fetch a cada ID
-        let objetos = await objetosPromise(ids);
+        let objetos = await promesasDeObjetos(ids);
         
         // Realizar traducción
         await traduccion(objetos);
@@ -112,14 +110,14 @@ async function traerIds(url) {
         }
         return [];
     } catch (error) {
-        console.log('Error en traerIds: ', error);
+        console.log('Error al traer ids: ', error);
         return [];
     }
 }
 
 // ----------------------------------------------- 
 
-async function objetosPromise(ids) {
+async function promesasDeObjetos(ids) {
     if (ids.length === 0) {
         console.log("No se encontró ningún elemento");
         return [];
@@ -131,7 +129,7 @@ async function objetosPromise(ids) {
             if (!respuesta.ok) return null;
             return await respuesta.json();
         } catch (error) {
-            console.log('Error en objetosPromise: ', error);
+            console.log('Error en las promesas de los objetos: ', error);
             return null;
         }
     });

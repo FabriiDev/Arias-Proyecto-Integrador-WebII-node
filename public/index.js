@@ -7,7 +7,7 @@ let indexPagina;
 
 // ------------------------------------------------- FOOTER INICIAL -----------------------------------------------------
 let foot;
-function footerInicial(){
+function footerInicial() {
     foot = document.getElementById('ftInicial');
     foot.style.position = "fixed";
     foot.style.bottom = "0";
@@ -86,13 +86,29 @@ function crearTarjeta(obraDeArte) {
 }
 // ------------------------------------------ crear botones paginacion ---------------------------------------------------------
 function botonesDeBajoTar() {
-    let btns = `<a href="#arriba"> <button onclick="anterior()">Anterior </button> </a> 
+    let btns = `<a> <button onclick="anterior()">Anterior </button> </a> 
                 <div class="cont_paginas">
                     <p>${nroDepag}</p>
                 </div>
-                <a href="#arriba"> <button onclick="siguiente()"> Siguiente </button> </a>`
+                <a> <button onclick="siguiente()"> Siguiente </button> </a>`
     document.getElementById('btn_debajo').innerHTML = btns;
 
+}
+
+// --------------------------------------- Scrooll arriba para los botones de abajo ----------------------------------------------
+
+
+function irArriba() {
+    let scrollDuration = 500; // Duración de la animación en milisegundos
+    let scrollStep = -window.scrollY / (scrollDuration / 15); 
+
+    let scrollInterval = setInterval(function () {
+        if (window.scrollY !== 0) {
+            window.scrollBy(0, scrollStep); 
+        } else {
+            clearInterval(scrollInterval); 
+        }
+    }, 15);
 }
 
 // ACTIVAR VISIVILAD DE LOS BOTONES DE ARRIBA
@@ -100,7 +116,7 @@ let btnArribaVisible
 function actibarBtnsArriba() {
     btnArribaVisible = document.getElementById("ocultos");
     btnArribaVisible.style.display = "flex";
-    
+
 }
 
 // ---------------------------------------------------- llenar combo departamentos ---------------------------------------------
@@ -246,7 +262,9 @@ function siguiente() {
     indexPagina++;
     if (indexPagina > objGlobal.length - 1) {
         indexPagina = objGlobal.length - 1;
+        return;
     }
+    irArriba();
     document.getElementById("cont_tarjeta").innerHTML = "";
     nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     document.getElementById("ver_paginas").innerHTML = nroDepag;
@@ -262,7 +280,10 @@ function anterior() {
     indexPagina--;
     if (indexPagina < 0) {
         indexPagina = 0;
+        return;
     }
+    irArriba();
+    console.log('volvio a entrarrrr')
     document.getElementById("cont_tarjeta").innerHTML = "";
     nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     document.getElementById("ver_paginas").innerHTML = nroDepag;
@@ -276,7 +297,7 @@ function anterior() {
 }
 
 //-------------------------------------------------------TIPO DE FILTRADO------------------------------------------------------------------------
-let dpt
+let dpt;
 function tipoDeFiltro() {
     dpt = seleccion
     let palabra = document.getElementById('palabra').value
@@ -308,7 +329,7 @@ function tipoDeFiltro() {
     } else {
         //alert('Elija al menos un filtro');
         showAlert('Elija al menos un filtro');
-        
+
         marcarError();
         url = '0'
         return url;
@@ -346,7 +367,7 @@ function closeAlert() {
 
 // -----------------------------------------------------------------------------------------------------
 
-function limpiarCampos(){
+function limpiarCampos() {
     document.getElementById('palabra').value = '';
     document.getElementById('combo-loc').selectedIndex = 0;
     document.getElementById('combo').selectedIndex = 0;
