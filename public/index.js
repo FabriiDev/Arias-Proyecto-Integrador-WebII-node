@@ -196,9 +196,10 @@ async function buscar() {
 
         // este if es por que vercel solo espera 10 segundos y a veces la llamada demora mas
         if (respuesta.status === 504) {
-            //alert("Tiempo de carga exedido... Vercel no me permite que la busqueda supere los 10 seg y a veces la api tarda demasiado");
-            showAlert('Tiempo de carga exedido... Vercel no me permite que la busqueda supere los 10 seg y a veces la api tarda demasiado');
-            window.location.href = window.location.href; // Recarga la página al aceptar el alert
+            showAlert('Tiempo de carga exedido... Vercel no me permite que la búsqueda supere los 10 seg y a veces la API tarda demasiado');
+            setTimeout(() => {
+                window.location.href = window.location.href; // Recarga la página después de unos segundos
+            }, 4000); 
             return;
         }
 
