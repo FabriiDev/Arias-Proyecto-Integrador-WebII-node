@@ -39,7 +39,7 @@ function crearTarjeta(obraDeArte) {
     let cultura = obraDeArte.culture || "No se sabe";
     let titulo = obraDeArte.title;
     let tarjetaHTML;
-    console.log('creando tarjetas');
+    //console.log('creando tarjetas');
 
     // ----------------------------------------------------------------------------------------- 
     // Verifica si el título ya ha sido mostrado
@@ -151,7 +151,7 @@ let depa;
 
 document.getElementById("combo").addEventListener("change", async (event) => {
     seleccion = event.target.value; // Obtén el valor de la opción seleccionada
-    console.log("Valor seleccionado: " + seleccion);
+    //console.log("Valor seleccionado: " + seleccion);
     depa = seleccion;
 });
 // -----------------------------------------------------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ let loca = '';
 
 document.getElementById("combo-loc").addEventListener("change", async (event) => {
     loca = event.target.value; // Obtén el valor de la opción seleccionada
-    console.log("Valor seleccionado: " + loca);
+    //console.log("Valor seleccionado: " + loca);
 });
 //------------------------------------------------------------------------------------------------------------------------------------
 
@@ -169,7 +169,7 @@ document.getElementById("combo-loc").addEventListener("change", async (event) =>
 let palabra;
 function leerPalabra() {
     palabra = document.getElementById("palabra").value;
-    console.log(palabra);
+    //console.log(palabra);
 }
 // -------------------------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------- Boton buscar ----------------------------------------------------------------
@@ -284,7 +284,6 @@ function anterior() {
         return;
     }
     irArriba();
-    console.log('volvio a entrarrrr')
     document.getElementById("cont_tarjeta").innerHTML = "";
     nroDepag = `Página: ${indexPagina + 1} de ${objGlobal.length}`;
     document.getElementById("ver_paginas").innerHTML = nroDepag;
@@ -306,7 +305,6 @@ function tipoDeFiltro() {
     let url;
 
     if (dpt !== 'nada' && palabra !== '' && lcl !== '') {
-        console.log('aca?')
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${lcl}&q=${palabra}&DepartmentId=${dpt}`;
         return url;
     } else if (dpt !== 'nada' && lcl !== '') {
