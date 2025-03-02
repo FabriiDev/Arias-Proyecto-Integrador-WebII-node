@@ -33,11 +33,3 @@ Para ejecutar este proyecto en tu máquina local, asegúrate de tener los siguie
 - **npm** o **yarn** para gestionar las dependencias.
 
 ---
-
-## Instalación
-
-1. **Clona el repositorio**:
-
-   ```bash
-   git clone https://github.com/tu_usuario/museo-metropolitano.git
-   cd museo-metropolitano
